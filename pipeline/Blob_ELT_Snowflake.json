@@ -1,6 +1,70 @@
 {
 	"name": "Blob_ELT_Snowflake",
 	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AvroSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						}
+					},
+					"sink": {
+						"type": "SnowflakeV2Sink",
+						"importSettings": {
+							"type": "SnowflakeImportCopyCommand"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Blob_upstream",
+						"type": "DatasetReference",
+						"parameters": {
+							"container": {
+								"value": "@pipeline().parameters.source_container",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "sf_bronze_layer",
+						"type": "DatasetReference",
+						"parameters": {
+							"database": {
+								"value": "@pipeline().parameters.database_name",
+								"type": "Expression"
+							},
+							"schema": {
+								"value": "@pipeline().parameters.schema_name",
+								"type": "Expression"
+							},
+							"table": {
+								"value": "@pipeline().parameters.target_table",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
 		"parameters": {
 			"source_container": {
 				"type": "string",
@@ -17,6 +81,10 @@
 			"schema_name": {
 				"type": "string",
 				"defaultValue": "BRONZE_LAYER"
+			},
+			"source_file_path": {
+				"type": "string",
+				"defaultValue": "@{formatDateTime(triggerBody().eventTime, 'yyyy/MM/dd')}"
 			}
 		},
 		"annotations": []
