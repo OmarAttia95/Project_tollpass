@@ -1,0 +1,9 @@
+{
+	"name": "snwflakeeltprogress",
+	"location": "uaenorth",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "0fe23e33-6a22-42e1-a54f-0e77afe7b107",
+		"tenantId": "cc660712-643a-4061-994d-5d82e0269523"
+	}
+}
