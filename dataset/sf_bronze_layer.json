@@ -5,6 +5,20 @@
 			"referenceName": "Snowflake1",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"database": {
+				"type": "string",
+				"defaultValue": "@dataset().database"
+			},
+			"schema": {
+				"type": "string",
+				"defaultValue": "@dataset().schema"
+			},
+			"table": {
+				"type": "string",
+				"defaultValue": "@dataset().table"
+			}
+		},
 		"annotations": [],
 		"type": "SnowflakeV2Table",
 		"schema": [],
