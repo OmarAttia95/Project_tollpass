@@ -1,9 +1,14 @@
 {
-	"name": "Avro1",
+	"name": "Blob_upstream",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "tollpass_blobstorage",
 			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"container": {
+				"type": "string"
+			}
 		},
 		"annotations": [],
 		"type": "Avro",
