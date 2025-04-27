@@ -1,0 +1,24 @@
+{
+	"name": "Blob_ELT_Snowflake",
+	"properties": {
+		"parameters": {
+			"source_container": {
+				"type": "string",
+				"defaultValue": "raw-toll-events"
+			},
+			"target_table": {
+				"type": "string",
+				"defaultValue": "bronze_toll_events"
+			},
+			"database_name": {
+				"type": "string",
+				"defaultValue": "TOLLPASS_DBO"
+			},
+			"schema_name": {
+				"type": "string",
+				"defaultValue": "BRONZE_LAYER"
+			}
+		},
+		"annotations": []
+	}
+}
