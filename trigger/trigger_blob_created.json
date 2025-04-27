@@ -1,0 +1,17 @@
+{
+	"name": "trigger_blob_created",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [],
+		"type": "BlobEventsTrigger",
+		"typeProperties": {
+			"blobPathBeginsWith": "/raw-toll-events/blobs/",
+			"ignoreEmptyBlobs": true,
+			"scope": "/subscriptions/a7f5961c-2c1f-4b12-9d42-f86f063bb26d/resourceGroups/dataengineering_project_toll/providers/Microsoft.Storage/storageAccounts/rawtollevents",
+			"events": [
+				"Microsoft.Storage.BlobCreated"
+			]
+		}
+	}
+}
