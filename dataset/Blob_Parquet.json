@@ -8,7 +8,7 @@
 		"parameters": {
 			"event_date": {
 				"type": "string",
-				"defaultValue": "@{pipeline().parameters.event_date}"
+				"defaultValue": "@formatDateTime(utcNow(), 'yyyy-MM-dd')"
 			}
 		},
 		"annotations": [],
