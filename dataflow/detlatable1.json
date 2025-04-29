@@ -46,7 +46,7 @@
 				"     ignoreNoFilesFound: false,",
 				"     format: 'parquet',",
 				"     wildcardPaths:['toll-events-processed/event_date=*']) ~> deltafraud",
-				"deltafraud filter(fraud_detected == true",
+				"deltafraud filter(fraud_detected == true()",
 				") ~> fraudonly",
 				"fraudonly sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
