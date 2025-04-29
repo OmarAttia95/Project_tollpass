@@ -15,7 +15,7 @@
 			"sinks": [],
 			"transformations": [
 				{
-					"name": "filter1"
+					"name": "fraudonly"
 				}
 			],
 			"scriptLines": [
@@ -39,7 +39,7 @@
 				"     format: 'parquet',",
 				"     wildcardPaths:['toll-events-processed/event_date=*']) ~> deltafraud",
 				"deltafraud filter(fraud_detected == true",
-				") ~> filter1"
+				") ~> fraudonly"
 			]
 		}
 	}
