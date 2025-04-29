@@ -1,0 +1,29 @@
+{
+	"name": "hourly_trigger",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "Tollpass_Pipeline",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"p_event_date": "@formatDateTime(trigger().startTime, 'yyyy-MM-dd')",
+					"p_output_path": "@concat('abfss://capture@tollpassadls2.dfs.core.windows.net/ehns-toll-streaming/toll-events-hub/0/', formatDateTime(trigger().startTime, 'yyyy/MM/dd/HH/'))",
+					"p_input_path": "abfss://delta@tollpassadls2.dfs.core.windows.net/toll-events-processed/"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Minute",
+				"interval": 60,
+				"startTime": "2025-04-29T17:16:00",
+				"timeZone": "Egypt Standard Time"
+			}
+		}
+	}
+}
