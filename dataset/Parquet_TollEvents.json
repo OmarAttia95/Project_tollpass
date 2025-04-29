@@ -16,6 +16,7 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": "event_date=@{dataset().event_date}",
+				"folderPath": "toll-events-processed",
 				"fileSystem": "delta"
 			},
 			"compressionCodec": "none"
