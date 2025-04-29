@@ -1,0 +1,209 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "adf-pipeline-project-tollpass"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
+		},
+		"AzureDataLakeStorage1_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1'"
+		},
+		"AzureDatabricks1_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'AzureDatabricks1'"
+		},
+		"Delta_blobs_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'Delta_blobs'"
+		},
+		"Snowflake1_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'Snowflake1'"
+		},
+		"SnowflakeLinkedService_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'SnowflakeLinkedService'"
+		},
+		"ls_snowflake_adf1_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'ls_snowflake_adf1'"
+		},
+		"tollpass_blob_storage_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'tollpass_blob_storage'"
+		},
+		"tollpass_blobstorage_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'tollpass_blobstorage'"
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://learningdatagen2.dfs.core.windows.net/"
+		},
+		"AzureDatabricks1_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "0429-152142-9dzgsna9"
+		},
+		"Delta_blobs_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://tollpassadls2.dfs.core.windows.net/"
+		},
+		"Snowflake1_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "TOLLPASS_DBO"
+		},
+		"SnowflakeLinkedService_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "ADF_1"
+		},
+		"SnowflakeLinkedService_properties_typeProperties_role": {
+			"type": "string",
+			"defaultValue": "ACCOUNTADMIN"
+		},
+		"Snowflake_DB_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "TOLLPASS_DBO"
+		},
+		"kv_databricks_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://kv-toll-streaming.vault.azure.net/"
+		},
+		"ls_blob_snowflake_stage_sasUri": {
+			"type": "secureString",
+			"metadata": "Secure string for 'sasUri' of 'ls_blob_snowflake_stage'"
+		},
+		"ls_snowflake_adf1_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "ADF_1"
+		},
+		"hourly_trigger_properties_Tollpass_Pipeline_parameters_event_date": {
+			"type": "string",
+			"defaultValue": "@formatDateTime(trigger().startTime, 'yyyy-MM-dd')"
+		},
+		"trigger_blob_created_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/a7f5961c-2c1f-4b12-9d42-f86f063bb26d/resourceGroups/dataengineering_project_toll/providers/Microsoft.Storage/storageAccounts/rawtollevents"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "adf-pipeline-project-tollpass_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"AzureBlobStorage1_connectionString": {
+						"value": "[parameters('AzureBlobStorage1_connectionString')]"
+					},
+					"AzureDataLakeStorage1_accountKey": {
+						"value": "[parameters('AzureDataLakeStorage1_accountKey')]"
+					},
+					"AzureDatabricks1_accessToken": {
+						"value": "[parameters('AzureDatabricks1_accessToken')]"
+					},
+					"Delta_blobs_accountKey": {
+						"value": "[parameters('Delta_blobs_accountKey')]"
+					},
+					"Snowflake1_password": {
+						"value": "[parameters('Snowflake1_password')]"
+					},
+					"SnowflakeLinkedService_password": {
+						"value": "[parameters('SnowflakeLinkedService_password')]"
+					},
+					"ls_snowflake_adf1_password": {
+						"value": "[parameters('ls_snowflake_adf1_password')]"
+					},
+					"tollpass_blob_storage_connectionString": {
+						"value": "[parameters('tollpass_blob_storage_connectionString')]"
+					},
+					"tollpass_blobstorage_connectionString": {
+						"value": "[parameters('tollpass_blobstorage_connectionString')]"
+					},
+					"AzureDataLakeStorage1_properties_typeProperties_url": {
+						"value": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]"
+					},
+					"AzureDatabricks1_properties_typeProperties_existingClusterId": {
+						"value": "[parameters('AzureDatabricks1_properties_typeProperties_existingClusterId')]"
+					},
+					"Delta_blobs_properties_typeProperties_url": {
+						"value": "[parameters('Delta_blobs_properties_typeProperties_url')]"
+					},
+					"Snowflake1_properties_typeProperties_database": {
+						"value": "[parameters('Snowflake1_properties_typeProperties_database')]"
+					},
+					"SnowflakeLinkedService_properties_typeProperties_database": {
+						"value": "[parameters('SnowflakeLinkedService_properties_typeProperties_database')]"
+					},
+					"SnowflakeLinkedService_properties_typeProperties_role": {
+						"value": "[parameters('SnowflakeLinkedService_properties_typeProperties_role')]"
+					},
+					"kv_databricks_properties_typeProperties_baseUrl": {
+						"value": "[parameters('kv_databricks_properties_typeProperties_baseUrl')]"
+					},
+					"ls_blob_snowflake_stage_sasUri": {
+						"value": "[parameters('ls_blob_snowflake_stage_sasUri')]"
+					},
+					"ls_snowflake_adf1_properties_typeProperties_database": {
+						"value": "[parameters('ls_snowflake_adf1_properties_typeProperties_database')]"
+					},
+					"trigger_blob_created_properties_typeProperties_scope": {
+						"value": "[parameters('trigger_blob_created_properties_typeProperties_scope')]"
+					},
+					"Snowflake_DB_properties_typeProperties_database": {
+						"value": "[parameters('Snowflake_DB_properties_typeProperties_database')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "adf-pipeline-project-tollpass_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"hourly_trigger_properties_Tollpass_Pipeline_parameters_event_date": {
+						"value": "[parameters('hourly_trigger_properties_Tollpass_Pipeline_parameters_event_date')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'adf-pipeline-project-tollpass_ArmTemplate_0')]"
+			]
+		}
+	]
+}

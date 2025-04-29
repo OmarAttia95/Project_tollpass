@@ -1,0 +1,72 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adf-pipeline-project-tollpass"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"value": ""
+		},
+		"AzureDataLakeStorage1_accountKey": {
+			"value": ""
+		},
+		"AzureDatabricks1_accessToken": {
+			"value": ""
+		},
+		"Delta_blobs_accountKey": {
+			"value": ""
+		},
+		"Snowflake1_password": {
+			"value": ""
+		},
+		"SnowflakeLinkedService_password": {
+			"value": ""
+		},
+		"ls_snowflake_adf1_password": {
+			"value": ""
+		},
+		"tollpass_blob_storage_connectionString": {
+			"value": ""
+		},
+		"tollpass_blobstorage_connectionString": {
+			"value": ""
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"value": "https://learningdatagen2.dfs.core.windows.net/"
+		},
+		"AzureDatabricks1_properties_typeProperties_existingClusterId": {
+			"value": "0429-152142-9dzgsna9"
+		},
+		"Delta_blobs_properties_typeProperties_url": {
+			"value": "https://tollpassadls2.dfs.core.windows.net/"
+		},
+		"Snowflake1_properties_typeProperties_database": {
+			"value": "TOLLPASS_DBO"
+		},
+		"SnowflakeLinkedService_properties_typeProperties_database": {
+			"value": "ADF_1"
+		},
+		"SnowflakeLinkedService_properties_typeProperties_role": {
+			"value": "ACCOUNTADMIN"
+		},
+		"Snowflake_DB_properties_typeProperties_database": {
+			"value": "TOLLPASS_DBO"
+		},
+		"kv_databricks_properties_typeProperties_baseUrl": {
+			"value": "https://kv-toll-streaming.vault.azure.net/"
+		},
+		"ls_blob_snowflake_stage_sasUri": {
+			"value": ""
+		},
+		"ls_snowflake_adf1_properties_typeProperties_database": {
+			"value": "ADF_1"
+		},
+		"hourly_trigger_properties_Tollpass_Pipeline_parameters_event_date": {
+			"value": "@formatDateTime(trigger().startTime, 'yyyy-MM-dd')"
+		},
+		"trigger_blob_created_properties_typeProperties_scope": {
+			"value": "/subscriptions/a7f5961c-2c1f-4b12-9d42-f86f063bb26d/resourceGroups/dataengineering_project_toll/providers/Microsoft.Storage/storageAccounts/rawtollevents"
+		}
+	}
+}

@@ -1,0 +1,668 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "adf-pipeline-project-tollpass"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
+		},
+		"AzureDataLakeStorage1_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1'"
+		},
+		"AzureDatabricks1_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'AzureDatabricks1'"
+		},
+		"Delta_blobs_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'Delta_blobs'"
+		},
+		"Snowflake1_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'Snowflake1'"
+		},
+		"SnowflakeLinkedService_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'SnowflakeLinkedService'"
+		},
+		"ls_snowflake_adf1_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'ls_snowflake_adf1'"
+		},
+		"tollpass_blob_storage_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'tollpass_blob_storage'"
+		},
+		"tollpass_blobstorage_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'tollpass_blobstorage'"
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://learningdatagen2.dfs.core.windows.net/"
+		},
+		"AzureDatabricks1_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "0429-152142-9dzgsna9"
+		},
+		"Delta_blobs_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://tollpassadls2.dfs.core.windows.net/"
+		},
+		"Snowflake1_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "TOLLPASS_DBO"
+		},
+		"SnowflakeLinkedService_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "ADF_1"
+		},
+		"SnowflakeLinkedService_properties_typeProperties_role": {
+			"type": "string",
+			"defaultValue": "ACCOUNTADMIN"
+		},
+		"kv_databricks_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://kv-toll-streaming.vault.azure.net/"
+		},
+		"ls_blob_snowflake_stage_sasUri": {
+			"type": "secureString",
+			"metadata": "Secure string for 'sasUri' of 'ls_blob_snowflake_stage'"
+		},
+		"ls_snowflake_adf1_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "ADF_1"
+		},
+		"trigger_blob_created_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/a7f5961c-2c1f-4b12-9d42-f86f063bb26d/resourceGroups/dataengineering_project_toll/providers/Microsoft.Storage/storageAccounts/rawtollevents"
+		},
+		"Snowflake_DB_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "TOLLPASS_DBO"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobStorage1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Azure Blob",
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureBlobStorage1_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureDataLakeStorage1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('AzureDataLakeStorage1_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureDatabricks1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureDatabricks",
+				"typeProperties": {
+					"domain": "https://adb-3703933276863041.1.azuredatabricks.net",
+					"accessToken": {
+						"type": "SecureString",
+						"value": "[parameters('AzureDatabricks1_accessToken')]"
+					},
+					"existingClusterId": "[parameters('AzureDatabricks1_properties_typeProperties_existingClusterId')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Delta_blobs')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('Delta_blobs_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('Delta_blobs_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Snowflake1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SnowflakeV2",
+				"typeProperties": {
+					"authenticationType": "Basic",
+					"accountIdentifier": "OOVQIZR-JU19519",
+					"user": "THINLAYER",
+					"database": "[parameters('Snowflake1_properties_typeProperties_database')]",
+					"warehouse": "COMPUTE_WH",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('Snowflake1_password')]"
+					}
+				},
+				"version": "1.1"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SnowflakeLinkedService')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SnowflakeV2",
+				"typeProperties": {
+					"authenticationType": "Basic",
+					"accountIdentifier": "JU19519",
+					"user": "THINLAYER",
+					"database": "[parameters('SnowflakeLinkedService_properties_typeProperties_database')]",
+					"warehouse": "COMPUTE_WH",
+					"role": "[parameters('SnowflakeLinkedService_properties_typeProperties_role')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('SnowflakeLinkedService_password')]"
+					}
+				},
+				"version": "1.1"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/kv_databricks')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('kv_databricks_properties_typeProperties_baseUrl')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_blob_snowflake_stage')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"sasUri": "[parameters('ls_blob_snowflake_stage_sasUri')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_snowflake_adf1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SnowflakeV2",
+				"typeProperties": {
+					"authenticationType": "Basic",
+					"accountIdentifier": "OOVQIZR-JU19519",
+					"user": "THINLAYER",
+					"database": "[parameters('ls_snowflake_adf1_properties_typeProperties_database')]",
+					"warehouse": "COMPUTE_WH",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('ls_snowflake_adf1_password')]"
+					}
+				},
+				"version": "1.1"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tollpass_blob_storage')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('tollpass_blob_storage_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tollpass_blobstorage')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('tollpass_blobstorage_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/trigger_blob_created')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/raw-toll-events/blobs/",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('trigger_blob_created_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Blob_Parquet')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_blob_snowflake_stage",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"event_date": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "snowflake-stage"
+					},
+					"compressionCodec": "none"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_blob_snowflake_stage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Blob_upstream')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "tollpass_blobstorage",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"container": {
+						"type": "string",
+						"defaultValue": "@dataset().container"
+					}
+				},
+				"annotations": [],
+				"type": "Avro",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "raw-toll-events"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/tollpass_blobstorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Gen2toBlob')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Delta_blobs",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"event_date": {
+						"type": "string",
+						"defaultValue": "@utcNow('yyyy-MM-dd')"
+					}
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "toll-events-processed",
+						"fileSystem": "delta"
+					},
+					"compressionCodec": "none"
+				},
+				"schema": [
+					{
+						"name": "transaction_id",
+						"type": "INT32"
+					},
+					{
+						"name": "vehicle_id",
+						"type": "UTF8"
+					},
+					{
+						"name": "license_plate",
+						"type": "UTF8"
+					},
+					{
+						"name": "vehicle_type",
+						"type": "UTF8"
+					},
+					{
+						"name": "toll_booth_id",
+						"type": "UTF8"
+					},
+					{
+						"name": "entry_point",
+						"type": "UTF8"
+					},
+					{
+						"name": "exit_point",
+						"type": "UTF8"
+					},
+					{
+						"name": "timestamp",
+						"type": "UTF8"
+					},
+					{
+						"name": "payment_method",
+						"type": "UTF8"
+					},
+					{
+						"name": "toll_amount",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "tag_valid",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "fraud_detected",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "event_date",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Delta_blobs')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/customers100000')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "customers-100000.csv",
+						"container": "container01"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sf_bronze_layer')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Snowflake1",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"database": {
+						"type": "string",
+						"defaultValue": "@dataset().database"
+					},
+					"schema": {
+						"type": "string",
+						"defaultValue": "@dataset().schema"
+					},
+					"table": {
+						"type": "string",
+						"defaultValue": "@dataset().table"
+					}
+				},
+				"annotations": [],
+				"type": "SnowflakeV2Table",
+				"schema": [],
+				"typeProperties": {
+					"schema": "BRONZE_LAYER",
+					"table": "bronze_toll_events"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Snowflake1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Snowflake_DB')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SnowflakeV2",
+				"typeProperties": {
+					"authenticationType": "Basic",
+					"accountIdentifier": "OOVQIZR-JU19519",
+					"user": "THINLAYER",
+					"database": "[parameters('Snowflake_DB_properties_typeProperties_database')]",
+					"warehouse": "COMPUTE_WH",
+					"password": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "kv_databricks",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "snowflakepass"
+					}
+				},
+				"version": "1.1"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/kv_databricks')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_snowflake_stg_fraud_events')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Snowflake_DB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SnowflakeV2Table",
+				"schema": [
+					{
+						"name": "TRANSACTION_ID",
+						"type": "NUMBER",
+						"precision": 38,
+						"scale": 0
+					},
+					{
+						"name": "VEHICLE_ID",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "LICENSE_PLATE",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "FRAUD_DETECTED",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "FRAUD_TYPE",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "DETECTED_TIMESTAMP",
+						"type": "TIMESTAMP_NTZ"
+					},
+					{
+						"name": "EVENT_DATE",
+						"type": "DATE"
+					}
+				],
+				"typeProperties": {
+					"schema": "SILVER_LAYER",
+					"table": "STG_FRAUD_EVENTS"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Snowflake_DB')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_snowflake_stg_toll_events')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Snowflake_DB",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"event_date": {
+						"type": "string",
+						"defaultValue": "@formatDateTime(utcNow(), 'yyyy-MM-dd')"
+					}
+				},
+				"annotations": [],
+				"type": "SnowflakeV2Table",
+				"schema": [
+					{
+						"name": "TRANSACTION_ID",
+						"type": "NUMBER",
+						"precision": 38,
+						"scale": 0
+					},
+					{
+						"name": "VEHICLE_ID",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "LICENSE_PLATE",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "VEHICLE_TYPE",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "TOLL_BOOTH_ID",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "ENTRY_POINT",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "EXIT_POINT",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "TIMESTAMP",
+						"type": "TIMESTAMP_NTZ"
+					},
+					{
+						"name": "PAYMENT_METHOD",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "TOLL_AMOUNT",
+						"type": "FLOAT"
+					},
+					{
+						"name": "TAG_VALID",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "FRAUD_DETECTED",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "EVENT_DATE",
+						"type": "DATE"
+					}
+				],
+				"typeProperties": {
+					"schema": "BRONZE_LAYER",
+					"table": "STG_TOLL_EVENTS"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Snowflake_DB')]"
+			]
+		}
+	]
+}
