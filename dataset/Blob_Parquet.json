@@ -7,8 +7,7 @@
 		},
 		"parameters": {
 			"event_date": {
-				"type": "string",
-				"defaultValue": "@formatDateTime(utcNow(), 'yyyy-MM-dd')"
+				"type": "string"
 			}
 		},
 		"annotations": [],
@@ -16,8 +15,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": ".*parquet",
-				"folderPath": "event_date=@{formatDateTime(utcNow(), 'yyyy-MM-dd')}",
+				"folderPath": "toll-events-processed",
 				"fileSystem": "delta"
 			},
 			"compressionCodec": "none"
