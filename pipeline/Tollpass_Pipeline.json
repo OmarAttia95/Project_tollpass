@@ -18,15 +18,7 @@
 					"notebookPath": "/Users/omar123915@hotmail.com/Avro to Parquet (Delta)",
 					"baseParameters": {
 						"event_date": {
-							"value": "@pipeline().parameters.p_event_date",
-							"type": "Expression"
-						},
-						"output_path": {
-							"value": "@pipeline().parameters.p_output_path",
-							"type": "Expression"
-						},
-						"input_path": {
-							"value": "@pipeline().parameters.p_input_path",
+							"value": "@pipeline().parameters.event_date",
 							"type": "Expression"
 						}
 					}
