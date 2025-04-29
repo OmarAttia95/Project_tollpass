@@ -10,9 +10,7 @@
 					"type": "PipelineReference"
 				},
 				"parameters": {
-					"p_event_date": "@formatDateTime(trigger().startTime, 'yyyy-MM-dd')",
-					"p_output_path": "@concat('abfss://capture@tollpassadls2.dfs.core.windows.net/ehns-toll-streaming/toll-events-hub/0/', formatDateTime(trigger().startTime, 'yyyy/MM/dd/HH/'))",
-					"p_input_path": "abfss://delta@tollpassadls2.dfs.core.windows.net/toll-events-processed/"
+					"event_date": "@formatDateTime(trigger().startTime, 'yyyy-MM-dd')"
 				}
 			}
 		],
