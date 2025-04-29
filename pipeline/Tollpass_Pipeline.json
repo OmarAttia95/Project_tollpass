@@ -37,81 +37,9 @@
 				}
 			},
 			{
-				"name": "Copy_To_Snowflake",
-				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "Avro-to-Parquet",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "ParquetSource",
-						"storeSettings": {
-							"type": "AzureBlobFSReadSettings",
-							"recursive": true,
-							"wildcardFileName": "*.parquet",
-							"enablePartitionDiscovery": false
-						},
-						"formatSettings": {
-							"type": "ParquetReadSettings"
-						}
-					},
-					"sink": {
-						"type": "SnowflakeV2Sink",
-						"importSettings": {
-							"type": "SnowflakeImportCopyCommand"
-						}
-					},
-					"enableStaging": true,
-					"stagingSettings": {
-						"linkedServiceName": {
-							"referenceName": "Delta_blobs",
-							"type": "LinkedServiceReference"
-						}
-					}
-				},
-				"inputs": [
-					{
-						"referenceName": "Parquet_TollEvents",
-						"type": "DatasetReference",
-						"parameters": {
-							"event_date": {
-								"value": "@utcNow('yyyy-MM-dd')",
-								"type": "Expression"
-							}
-						}
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "ds_snowflake_stg_toll_events",
-						"type": "DatasetReference"
-					}
-				]
-			},
-			{
 				"name": "DF_LoadFraudEvents",
 				"type": "ExecuteDataFlow",
-				"dependsOn": [
-					{
-						"activity": "Avro-to-Parquet",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -150,7 +78,14 @@
 			{
 				"name": "Copy_To_Snowflake_TollEvents",
 				"type": "Copy",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Avro-to-Parquet",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -172,15 +107,84 @@
 							"type": "ParquetReadSettings"
 						}
 					},
-					"enableStaging": false
+					"sink": {
+						"type": "SnowflakeV2Sink",
+						"importSettings": {
+							"type": "SnowflakeImportCopyCommand"
+						}
+					},
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "ls_blob_snowflake_stage",
+							"type": "LinkedServiceReference"
+						},
+						"path": "snowflake-stage"
+					},
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"sink": {
+									"name": "TRANSACTION_ID",
+									"type": "Int64"
+								}
+							},
+							{
+								"sink": {
+									"name": "VEHICLE_ID",
+									"type": "String"
+								}
+							},
+							{
+								"sink": {
+									"name": "LICENSE_PLATE",
+									"type": "String"
+								}
+							},
+							{
+								"sink": {
+									"name": "FRAUD_DETECTED",
+									"type": "Boolean"
+								}
+							},
+							{
+								"sink": {
+									"name": "FRAUD_TYPE",
+									"type": "String"
+								}
+							},
+							{
+								"sink": {
+									"name": "DETECTED_TIMESTAMP",
+									"type": "DateTime"
+								}
+							},
+							{
+								"sink": {
+									"name": "EVENT_DATE",
+									"type": "DateTime"
+								}
+							}
+						]
+					}
 				},
 				"inputs": [
 					{
-						"referenceName": "Parquet_TollEvents",
+						"referenceName": "Blob_Parquet",
 						"type": "DatasetReference",
 						"parameters": {
-							"event_date": "@utcNow('yyyy-MM-dd')"
+							"event_date": {
+								"value": "@{pipeline().parameters.p_event_date}",
+								"type": "Expression"
+							}
 						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_snowflake_stg_fraud_events",
+						"type": "DatasetReference"
 					}
 				]
 			}
