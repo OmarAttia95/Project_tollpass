@@ -1,6 +1,33 @@
 {
 	"name": "Tollpass_Pipeline",
 	"properties": {
+		"activities": [
+			{
+				"name": "Avro-to-Parquet",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/omar123915@hotmail.com/Avro to Parquet (Delta)",
+					"baseParameters": {
+						"event_date": "@pipeline().parameters.p_event_date",
+						"output_path": "@pipeline().parameters.p_output_path",
+						"input_path": "@pipeline().parameters.p_input_path"
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricks1",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
 		"parameters": {
 			"p_event_date": {
 				"type": "string",
