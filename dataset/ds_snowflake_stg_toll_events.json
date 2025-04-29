@@ -5,6 +5,12 @@
 			"referenceName": "Snowflake_DB",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"event_date": {
+				"type": "string",
+				"defaultValue": "@formatDateTime(utcNow(), 'yyyy-MM-dd')"
+			}
+		},
 		"annotations": [],
 		"type": "SnowflakeV2Table",
 		"schema": [
