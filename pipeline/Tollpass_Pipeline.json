@@ -100,7 +100,6 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
-							"wildcardFileName": ".*parquet",
 							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
@@ -175,7 +174,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"event_date": {
-								"value": "@{pipeline().parameters.p_event_date}",
+								"value": "@formatDateTime(utcNow(), 'yyyy-MM-dd')",
 								"type": "Expression"
 							}
 						}
