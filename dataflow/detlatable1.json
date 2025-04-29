@@ -12,7 +12,15 @@
 					"name": "deltafraud"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_snowflake_stg_fraud_events",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "fraudonly"
@@ -39,7 +47,26 @@
 				"     format: 'parquet',",
 				"     wildcardPaths:['toll-events-processed/event_date=*']) ~> deltafraud",
 				"deltafraud filter(fraud_detected == true",
-				") ~> fraudonly"
+				") ~> fraudonly",
+				"fraudonly sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          TRANSACTION_ID as decimal(38,0),",
+				"          VEHICLE_ID as string,",
+				"          LICENSE_PLATE as string,",
+				"          FRAUD_DETECTED as boolean,",
+				"          FRAUD_TYPE as string,",
+				"          DETECTED_TIMESTAMP as timestamp,",
+				"          EVENT_DATE as date",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     stageInsert: true) ~> sink1"
 			]
 		}
 	}
