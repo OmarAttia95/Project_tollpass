@@ -15,8 +15,14 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "event_date=@{dataset().event_date}",
-				"folderPath": "toll-events-processed",
+				"fileName": {
+					"value": ".*parquet",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "toll-events-processed/event_date=@{dataset().event_date}",
+					"type": "Expression"
+				},
 				"fileSystem": "delta"
 			},
 			"compressionCodec": "none"
