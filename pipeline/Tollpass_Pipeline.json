@@ -255,6 +255,193 @@
 						}
 					}
 				]
+			},
+			{
+				"name": "BlobToSnowflake",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ParquetSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"wildcardFileName": "*.parquet",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "ParquetReadSettings"
+						}
+					},
+					"sink": {
+						"type": "SnowflakeV2Sink",
+						"importSettings": {
+							"type": "SnowflakeImportCopyCommand"
+						}
+					},
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "ls_blob_snowflake_stage",
+							"type": "LinkedServiceReference"
+						},
+						"path": "snowflake-stage/event_date=2025-04-29"
+					},
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "TRANSACTION_ID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "TRANSACTION_ID",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"name": "VEHICLE_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "VEHICLE_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "LICENSE_PLATE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "LICENSE_PLATE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "VEHICLE_TYPE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "VEHICLE_TYPE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TOLL_BOOTH_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TOLL_BOOTH_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ENTRY_POINT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ENTRY_POINT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "EXIT_POINT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "EXIT_POINT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIMESTAMP",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIMESTAMP",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "PAYMENT_METHOD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PAYMENT_METHOD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TOLL_AMOUNT",
+									"type": "Double"
+								},
+								"sink": {
+									"name": "TOLL_AMOUNT",
+									"type": "Double"
+								}
+							},
+							{
+								"source": {
+									"name": "TAG_VALID",
+									"type": "Boolean"
+								},
+								"sink": {
+									"name": "TAG_VALID",
+									"type": "Boolean"
+								}
+							},
+							{
+								"source": {
+									"name": "FRAUD_DETECTED",
+									"type": "Boolean"
+								},
+								"sink": {
+									"name": "FRAUD_DETECTED",
+									"type": "Boolean"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Blob_Parquet",
+						"type": "DatasetReference",
+						"parameters": {
+							"event_date": {
+								"value": "@utcNow('yyyy-MM-dd')",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_snowflake_stg_toll_events",
+						"type": "DatasetReference",
+						"parameters": {
+							"event_date": "@formatDateTime(utcNow(), 'yyyy-MM-dd')"
+						}
+					}
+				]
 			}
 		],
 		"parameters": {
