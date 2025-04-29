@@ -1,0 +1,24 @@
+{
+	"name": "Parquet_TollEvents",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Delta_blobs",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"event_date": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "@concat('delta/event_date=', dataset().event_date)"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": []
+	}
+}
