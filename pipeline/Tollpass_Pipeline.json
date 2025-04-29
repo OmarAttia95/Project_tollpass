@@ -29,45 +29,6 @@
 				}
 			},
 			{
-				"name": "DF_LoadFraudEvents",
-				"type": "ExecuteDataFlow",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"dataflow": {
-						"referenceName": "detlatable1",
-						"type": "DataFlowReference",
-						"datasetParameters": {
-							"deltafraud": {
-								"event_date": {
-									"value": "@utcNow('yyyy-MM-dd')",
-									"type": "Expression"
-								}
-							}
-						}
-					},
-					"staging": {
-						"linkedService": {
-							"referenceName": "ls_blob_snowflake_stage",
-							"type": "LinkedServiceReference"
-						},
-						"folderPath": "snowflake-stage/temp/ "
-					},
-					"compute": {
-						"coreCount": 8,
-						"computeType": "General"
-					},
-					"traceLevel": "Fine"
-				}
-			},
-			{
 				"name": "Copy_To_Snowflake_TollEvents",
 				"type": "Copy",
 				"dependsOn": [
@@ -92,11 +53,6 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
-							"wildcardFolderPath": {
-								"value": "toll-events-processed",
-								"type": "Expression"
-							},
-							"wildcardFileName": "*.parquet",
 							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
@@ -104,9 +60,12 @@
 						}
 					},
 					"sink": {
-						"type": "SnowflakeV2Sink",
-						"importSettings": {
-							"type": "SnowflakeImportCopyCommand"
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
 						}
 					},
 					"enableStaging": true,
@@ -115,66 +74,184 @@
 							"referenceName": "ls_blob_snowflake_stage",
 							"type": "LinkedServiceReference"
 						},
-						"path": "snowflake-stage"
+						"path": ""
 					},
 					"translator": {
 						"type": "TabularTranslator",
 						"mappings": [
 							{
+								"source": {
+									"name": "transaction_id",
+									"type": "Int32",
+									"physicalType": "INT32"
+								},
 								"sink": {
 									"name": "TRANSACTION_ID",
-									"type": "Int64"
+									"type": "Int64",
+									"physicalType": "NUMBER",
+									"scale": 0,
+									"precision": 38
 								}
 							},
 							{
+								"source": {
+									"name": "vehicle_id",
+									"type": "String",
+									"physicalType": "UTF8"
+								},
 								"sink": {
 									"name": "VEHICLE_ID",
-									"type": "String"
+									"type": "String",
+									"physicalType": "VARCHAR"
 								}
 							},
 							{
+								"source": {
+									"name": "license_plate",
+									"type": "String",
+									"physicalType": "UTF8"
+								},
 								"sink": {
 									"name": "LICENSE_PLATE",
-									"type": "String"
+									"type": "String",
+									"physicalType": "VARCHAR"
 								}
 							},
 							{
+								"source": {
+									"name": "vehicle_type",
+									"type": "String",
+									"physicalType": "UTF8"
+								},
+								"sink": {
+									"name": "VEHICLE_TYPE",
+									"type": "String",
+									"physicalType": "VARCHAR"
+								}
+							},
+							{
+								"source": {
+									"name": "toll_booth_id",
+									"type": "String",
+									"physicalType": "UTF8"
+								},
+								"sink": {
+									"name": "TOLL_BOOTH_ID",
+									"type": "String",
+									"physicalType": "VARCHAR"
+								}
+							},
+							{
+								"source": {
+									"name": "entry_point",
+									"type": "String",
+									"physicalType": "UTF8"
+								},
+								"sink": {
+									"name": "ENTRY_POINT",
+									"type": "String",
+									"physicalType": "VARCHAR"
+								}
+							},
+							{
+								"source": {
+									"name": "exit_point",
+									"type": "String",
+									"physicalType": "UTF8"
+								},
+								"sink": {
+									"name": "EXIT_POINT",
+									"type": "String",
+									"physicalType": "VARCHAR"
+								}
+							},
+							{
+								"source": {
+									"name": "timestamp",
+									"type": "String",
+									"physicalType": "UTF8"
+								},
+								"sink": {
+									"name": "TIMESTAMP",
+									"type": "DateTime",
+									"physicalType": "TIMESTAMP_NTZ"
+								}
+							},
+							{
+								"source": {
+									"name": "payment_method",
+									"type": "String",
+									"physicalType": "UTF8"
+								},
+								"sink": {
+									"name": "PAYMENT_METHOD",
+									"type": "String",
+									"physicalType": "VARCHAR"
+								}
+							},
+							{
+								"source": {
+									"name": "toll_amount",
+									"type": "Double",
+									"physicalType": "DOUBLE"
+								},
+								"sink": {
+									"name": "TOLL_AMOUNT",
+									"type": "Double",
+									"physicalType": "FLOAT"
+								}
+							},
+							{
+								"source": {
+									"name": "tag_valid",
+									"type": "Boolean",
+									"physicalType": "BOOLEAN"
+								},
+								"sink": {
+									"name": "TAG_VALID",
+									"type": "Boolean",
+									"physicalType": "BOOLEAN"
+								}
+							},
+							{
+								"source": {
+									"name": "fraud_detected",
+									"type": "Boolean",
+									"physicalType": "BOOLEAN"
+								},
 								"sink": {
 									"name": "FRAUD_DETECTED",
-									"type": "Boolean"
-								}
-							},
-							{
-								"sink": {
-									"name": "FRAUD_TYPE",
-									"type": "String"
-								}
-							},
-							{
-								"sink": {
-									"name": "DETECTED_TIMESTAMP",
-									"type": "DateTime"
-								}
-							},
-							{
-								"sink": {
-									"name": "EVENT_DATE",
-									"type": "DateTime"
+									"type": "Boolean",
+									"physicalType": "BOOLEAN"
 								}
 							}
-						]
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
 					}
 				},
 				"inputs": [
 					{
-						"referenceName": "Blob_Parquet",
-						"type": "DatasetReference"
+						"referenceName": "Gen2toBlob",
+						"type": "DatasetReference",
+						"parameters": {
+							"event_date": "@utcNow('yyyy-MM-dd')"
+						}
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "ds_snowflake_stg_fraud_events",
-						"type": "DatasetReference"
+						"referenceName": "Blob_Parquet",
+						"type": "DatasetReference",
+						"parameters": {
+							"event_date": {
+								"value": "@utcNow('yyyy-MM-dd')",
+								"type": "Expression"
+							}
+						}
 					}
 				]
 			}
