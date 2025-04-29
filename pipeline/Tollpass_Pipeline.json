@@ -296,129 +296,8 @@
 						"path": "snowflake-stage/event_date=2025-04-29"
 					},
 					"translator": {
-						"type": "TabularTranslator",
-						"mappings": [
-							{
-								"source": {
-									"name": "TRANSACTION_ID",
-									"type": "Int32"
-								},
-								"sink": {
-									"name": "TRANSACTION_ID",
-									"type": "Int64"
-								}
-							},
-							{
-								"source": {
-									"name": "VEHICLE_ID",
-									"type": "String"
-								},
-								"sink": {
-									"name": "VEHICLE_ID",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "LICENSE_PLATE",
-									"type": "String"
-								},
-								"sink": {
-									"name": "LICENSE_PLATE",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "VEHICLE_TYPE",
-									"type": "String"
-								},
-								"sink": {
-									"name": "VEHICLE_TYPE",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "TOLL_BOOTH_ID",
-									"type": "String"
-								},
-								"sink": {
-									"name": "TOLL_BOOTH_ID",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "ENTRY_POINT",
-									"type": "String"
-								},
-								"sink": {
-									"name": "ENTRY_POINT",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "EXIT_POINT",
-									"type": "String"
-								},
-								"sink": {
-									"name": "EXIT_POINT",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "TIMESTAMP",
-									"type": "String"
-								},
-								"sink": {
-									"name": "TIMESTAMP",
-									"type": "DateTime"
-								}
-							},
-							{
-								"source": {
-									"name": "PAYMENT_METHOD",
-									"type": "String"
-								},
-								"sink": {
-									"name": "PAYMENT_METHOD",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "TOLL_AMOUNT",
-									"type": "Double"
-								},
-								"sink": {
-									"name": "TOLL_AMOUNT",
-									"type": "Double"
-								}
-							},
-							{
-								"source": {
-									"name": "TAG_VALID",
-									"type": "Boolean"
-								},
-								"sink": {
-									"name": "TAG_VALID",
-									"type": "Boolean"
-								}
-							},
-							{
-								"source": {
-									"name": "FRAUD_DETECTED",
-									"type": "Boolean"
-								},
-								"sink": {
-									"name": "FRAUD_DETECTED",
-									"type": "Boolean"
-								}
-							}
-						]
+						"value": "\"typeProperties\": {\n  \"source\": {\n    ...\n  },\n  \"sink\": {\n    ...\n  },\n  \"enableStaging\": false,\n  \"translator\": {\n    \"type\": \"TabularTranslator\"\n  },\n  \"mappings\": [\n    {\n      \"source\": {\n        \"name\": \"TAG_VALID\"\n      },\n      \"sink\": {\n        \"name\": \"TAG_VALID\"\n      }\n    },\n    {\n      \"source\": {\n        \"name\": \"FRAUD_DETECTED\"\n      },\n      \"sink\": {\n        \"name\": \"FRAUD_DETECTED\"\n      }\n    },\n    {\n      \"source\": {\n        \"value\": \"@pipeline().parameters.event_date\",\n        \"type\": \"Expression\"\n      },\n      \"sink\": {\n        \"name\": \"EVENT_DATE\"\n      }\n    }\n  ]\n}\n",
+						"type": "Expression"
 					}
 				},
 				"inputs": [
@@ -448,6 +327,10 @@
 			"event_date": {
 				"type": "string",
 				"defaultValue": "@utcNow('yyyy-MM-dd')"
+			},
+			"json_event_date": {
+				"type": "string",
+				"defaultValue": "@formatDateTime(utcNow(), 'yyyy-MM-dd')"
 			}
 		},
 		"annotations": []
