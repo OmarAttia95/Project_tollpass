@@ -5,8 +5,8 @@
 		"annotations": [],
 		"type": "AzureBlobStorage",
 		"typeProperties": {
-			"connectionString": "DefaultEndpointsProtocol=https;AccountName=tollpassblobstage;EndpointSuffix=core.windows.net;",
-			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQEVDRTVGMTUwLTFDMTUtNDU4Qi1BQkM0LTEwRDg0MjhGODc1QV81NjM5YzFkNC0wMmJkLTQ5ZDAtYmMyMi1mMDg5Nzc5YzQxNzMiDQp9"
+			"sasUri": "https://tollpassblobstage.blob.core.windows.net/",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQEVDRTVGMTUwLTFDMTUtNDU4Qi1BQkM0LTEwRDg0MjhGODc1QV9kNWZiZGE3Mi1mYmRkLTQ4NjgtODRkNS0yYjM0MDA2MTU4MzIiDQp9"
 		}
 	}
 }
