@@ -70,7 +70,7 @@
 			}
 		],
 		"typeProperties": {
-			"schema": "SILVER_LAYER",
+			"schema": "BRONZE_LAYER",
 			"table": "STG_TOLL_EVENTS"
 		}
 	}
