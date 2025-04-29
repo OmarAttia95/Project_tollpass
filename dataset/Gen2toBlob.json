@@ -1,0 +1,26 @@
+{
+	"name": "Gen2toBlob",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Delta_blobs",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"event_date": {
+				"type": "string",
+				"defaultValue": "@utcNow('yyyy-MM-dd')"
+			}
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "toll-events-processed",
+				"fileSystem": "delta"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": []
+	}
+}
