@@ -7,7 +7,8 @@
 		},
 		"parameters": {
 			"event_date": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "@utcNow('yyyy-MM-dd)"
 			}
 		},
 		"annotations": [],
@@ -20,7 +21,7 @@
 					"type": "Expression"
 				},
 				"folderPath": {
-					"value": "toll-events-processed/event_date=@{dataset().event_date}",
+					"value": "toll-events-processed",
 					"type": "Expression"
 				},
 				"fileSystem": "delta"
