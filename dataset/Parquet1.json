@@ -1,0 +1,27 @@
+{
+	"name": "Parquet1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Delta_blobs",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"event_date": {
+				"type": "string",
+				"defaultValue": "@{pipeline().parameters.event_date}"
+			}
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": ".*parquet",
+				"folderPath": "event_date=@{formatDateTime(utcNow(), 'yyyy-MM-dd')}",
+				"fileSystem": "delta"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": []
+	}
+}
