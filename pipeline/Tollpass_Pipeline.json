@@ -100,6 +100,8 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
+							"wildcardFolderPath": "event_date",
+							"wildcardFileName": ".*parquet",
 							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
@@ -191,7 +193,7 @@
 		"parameters": {
 			"p_event_date": {
 				"type": "string",
-				"defaultValue": "@utcNow('yyyy-MM-dd')"
+				"defaultValue": "@formatDateTime(utcNow(), 'yyyy-MM-dd')"
 			}
 		},
 		"annotations": []
