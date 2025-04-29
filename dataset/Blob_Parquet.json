@@ -15,8 +15,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": ".*parquet",
-				"folderPath": "event_date=2025-04-29",
 				"container": "snowflake-stage"
 			},
 			"compressionCodec": "none"
