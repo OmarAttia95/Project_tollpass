@@ -15,7 +15,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"folderPath": "raw",
 				"container": "snowflake-stage"
 			},
 			"compressionCodec": "none"
