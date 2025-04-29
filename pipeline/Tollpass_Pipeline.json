@@ -165,13 +165,7 @@
 				"inputs": [
 					{
 						"referenceName": "Blob_Parquet",
-						"type": "DatasetReference",
-						"parameters": {
-							"event_date": {
-								"value": "event_date=@{dataset().event_date}",
-								"type": "Expression"
-							}
-						}
+						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
@@ -185,7 +179,7 @@
 		"parameters": {
 			"event_date": {
 				"type": "string",
-				"defaultValue": "@formatDateTime(utcNow(), 'yyyy-MM-dd')"
+				"defaultValue": "@utcNow('yyyy-MM-dd')"
 			}
 		},
 		"annotations": []
