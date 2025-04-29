@@ -46,8 +46,7 @@
 				"     ignoreNoFilesFound: false,",
 				"     format: 'parquet',",
 				"     wildcardPaths:['toll-events-processed/event_date=*']) ~> deltafraud",
-				"deltafraud filter(fraud_detected == true()",
-				") ~> fraudonly",
+				"deltafraud filter(fraud_detected == true()) ~> fraudonly",
 				"fraudonly sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
@@ -66,6 +65,7 @@
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 1,",
 				"     stageInsert: true) ~> sink1"
 			]
 		}
