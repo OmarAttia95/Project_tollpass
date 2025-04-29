@@ -74,7 +74,13 @@
 							"type": "SnowflakeImportCopyCommand"
 						}
 					},
-					"enableStaging": false
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "Delta_blobs",
+							"type": "LinkedServiceReference"
+						}
+					}
 				},
 				"inputs": [
 					{
@@ -100,7 +106,7 @@
 				"type": "ExecuteDataFlow",
 				"dependsOn": [
 					{
-						"activity": "Copy_To_Snowflake",
+						"activity": "Avro-to-Parquet",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -127,12 +133,56 @@
 							}
 						}
 					},
+					"staging": {
+						"linkedService": {
+							"referenceName": "ls_blob_snowflake_stage",
+							"type": "LinkedServiceReference"
+						},
+						"folderPath": "snowflake-stage/temp/ "
+					},
 					"compute": {
 						"coreCount": 8,
 						"computeType": "General"
 					},
 					"traceLevel": "Fine"
 				}
+			},
+			{
+				"name": "Copy_To_Snowflake_TollEvents",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ParquetSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFileName": ".*parquet",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "ParquetReadSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Parquet_TollEvents",
+						"type": "DatasetReference",
+						"parameters": {
+							"event_date": "@utcNow('yyyy-MM-dd')"
+						}
+					}
+				]
 			}
 		],
 		"parameters": {
