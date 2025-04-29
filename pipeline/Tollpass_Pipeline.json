@@ -26,6 +26,53 @@
 					"referenceName": "AzureDatabricks1",
 					"type": "LinkedServiceReference"
 				}
+			},
+			{
+				"name": "Copy_To_Snowflake",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"typeProperties": {
+					"source": {
+						"type": "ParquetSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "ParquetReadSettings"
+						}
+					},
+					"sink": {
+						"type": "SnowflakeV2Sink",
+						"importSettings": {
+							"type": "SnowflakeImportCopyCommand"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Parquet_TollEvents",
+						"type": "DatasetReference",
+						"parameters": {
+							"event_date": "@concat('event_date=', pipeline().parameters.p_event_date)"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_snowflake_stg_toll_events",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"parameters": {
