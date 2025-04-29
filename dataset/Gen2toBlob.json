@@ -21,6 +21,59 @@
 			},
 			"compressionCodec": "none"
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "transaction_id",
+				"type": "INT32"
+			},
+			{
+				"name": "vehicle_id",
+				"type": "UTF8"
+			},
+			{
+				"name": "license_plate",
+				"type": "UTF8"
+			},
+			{
+				"name": "vehicle_type",
+				"type": "UTF8"
+			},
+			{
+				"name": "toll_booth_id",
+				"type": "UTF8"
+			},
+			{
+				"name": "entry_point",
+				"type": "UTF8"
+			},
+			{
+				"name": "exit_point",
+				"type": "UTF8"
+			},
+			{
+				"name": "timestamp",
+				"type": "UTF8"
+			},
+			{
+				"name": "payment_method",
+				"type": "UTF8"
+			},
+			{
+				"name": "toll_amount",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "tag_valid",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "fraud_detected",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "event_date",
+				"type": "UTF8"
+			}
+		]
 	}
 }
