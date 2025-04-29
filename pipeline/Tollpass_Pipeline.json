@@ -29,7 +29,7 @@
 				}
 			},
 			{
-				"name": "Copy_To_Snowflake_TollEvents",
+				"name": "Gen2toBlob",
 				"type": "Copy",
 				"dependsOn": [
 					{
@@ -259,7 +259,14 @@
 			{
 				"name": "BlobToSnowflake",
 				"type": "Copy",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Gen2toBlob",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
