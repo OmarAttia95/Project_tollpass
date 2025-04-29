@@ -92,8 +92,11 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
-							"wildcardFolderPath": "event_date",
-							"wildcardFileName": ".*parquet",
+							"wildcardFolderPath": {
+								"value": "toll-events-processed",
+								"type": "Expression"
+							},
+							"wildcardFileName": "*.parquet",
 							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
