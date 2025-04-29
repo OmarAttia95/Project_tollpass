@@ -15,7 +15,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "@dataset().event_date",
+				"fileName": "event_date=@{dataset().event_date}",
 				"fileSystem": "delta"
 			},
 			"compressionCodec": "none"
