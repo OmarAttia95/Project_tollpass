@@ -1,0 +1,20 @@
+{
+	"name": "Tollpass_Pipeline",
+	"properties": {
+		"parameters": {
+			"p_event_date": {
+				"type": "string",
+				"defaultValue": "@utcNow('yyyy-MM-dd')"
+			},
+			"p_output_path": {
+				"type": "string",
+				"defaultValue": "\"abfss://delta@tollpassadls2.dfs.core.windows.net/toll-events-processed\""
+			},
+			"p_input_path": {
+				"type": "string",
+				"defaultValue": "\"abfss://capture@tollpassadls2.dfs.core.windows.net/ehns-toll-streaming/toll-events-hub\""
+			}
+		},
+		"annotations": []
+	}
+}
