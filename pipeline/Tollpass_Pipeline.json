@@ -30,7 +30,14 @@
 			{
 				"name": "Copy_To_Snowflake",
 				"type": "Copy",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Avro-to-Parquet",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -44,6 +51,7 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
+							"wildcardFileName": "*.parquet",
 							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
@@ -63,7 +71,10 @@
 						"referenceName": "Parquet_TollEvents",
 						"type": "DatasetReference",
 						"parameters": {
-							"event_date": "@concat('event_date=', pipeline().parameters.p_event_date)"
+							"event_date": {
+								"value": "@utcNow('yyyy-MM-dd')",
+								"type": "Expression"
+							}
 						}
 					}
 				],
@@ -73,20 +84,43 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "DF_LoadFraudEvents",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "Copy_To_Snowflake",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "detlatable1",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
 			}
 		],
 		"parameters": {
 			"p_event_date": {
 				"type": "string",
 				"defaultValue": "@utcNow('yyyy-MM-dd')"
-			},
-			"p_output_path": {
-				"type": "string",
-				"defaultValue": "\"abfss://delta@tollpassadls2.dfs.core.windows.net/toll-events-processed\""
-			},
-			"p_input_path": {
-				"type": "string",
-				"defaultValue": "\"abfss://capture@tollpassadls2.dfs.core.windows.net/ehns-toll-streaming/toll-events-hub\""
 			}
 		},
 		"annotations": []
