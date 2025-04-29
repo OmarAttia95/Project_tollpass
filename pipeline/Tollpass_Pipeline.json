@@ -17,9 +17,18 @@
 				"typeProperties": {
 					"notebookPath": "/Users/omar123915@hotmail.com/Avro to Parquet (Delta)",
 					"baseParameters": {
-						"event_date": "@pipeline().parameters.p_event_date",
-						"output_path": "@pipeline().parameters.p_output_path",
-						"input_path": "@pipeline().parameters.p_input_path"
+						"event_date": {
+							"value": "@pipeline().parameters.p_event_date",
+							"type": "Expression"
+						},
+						"output_path": {
+							"value": "@pipeline().parameters.p_output_path",
+							"type": "Expression"
+						},
+						"input_path": {
+							"value": "@pipeline().parameters.p_input_path",
+							"type": "Expression"
+						}
 					}
 				},
 				"linkedServiceName": {
@@ -45,6 +54,7 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
+				"userProperties": [],
 				"typeProperties": {
 					"source": {
 						"type": "ParquetSource",
@@ -107,7 +117,15 @@
 				"typeProperties": {
 					"dataflow": {
 						"referenceName": "detlatable1",
-						"type": "DataFlowReference"
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"deltafraud": {
+								"event_date": {
+									"value": "@utcNow('yyyy-MM-dd')",
+									"type": "Expression"
+								}
+							}
+						}
 					},
 					"compute": {
 						"coreCount": 8,
