@@ -2,7 +2,7 @@
 	"name": "Blob_Parquet",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "Delta_blobs",
+			"referenceName": "ls_blob_snowflake_stage",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
@@ -14,9 +14,9 @@
 		"type": "Parquet",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobFSLocation",
-				"folderPath": "toll-events-processed",
-				"fileSystem": "delta"
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "raw",
+				"container": "snowflake-stage"
 			},
 			"compressionCodec": "none"
 		},
