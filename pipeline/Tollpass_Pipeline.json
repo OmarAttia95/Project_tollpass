@@ -69,14 +69,7 @@
 							"type": "ParquetWriteSettings"
 						}
 					},
-					"enableStaging": true,
-					"stagingSettings": {
-						"linkedServiceName": {
-							"referenceName": "ls_blob_snowflake_stage",
-							"type": "LinkedServiceReference"
-						},
-						"path": ""
-					},
+					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
 						"mappings": [
