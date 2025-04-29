@@ -1,0 +1,47 @@
+{
+	"name": "ds_snowflake_stg_fraud_events",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Snowflake_DB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "TRANSACTION_ID",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "VEHICLE_ID",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "LICENSE_PLATE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "FRAUD_DETECTED",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "FRAUD_TYPE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "DETECTED_TIMESTAMP",
+				"type": "TIMESTAMP_NTZ"
+			},
+			{
+				"name": "EVENT_DATE",
+				"type": "DATE"
+			}
+		],
+		"typeProperties": {
+			"schema": "SILVER_LAYER",
+			"table": "STG_FRAUD_EVENTS"
+		}
+	}
+}

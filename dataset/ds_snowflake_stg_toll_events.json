@@ -1,0 +1,71 @@
+{
+	"name": "ds_snowflake_stg_toll_events",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Snowflake_DB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "TRANSACTION_ID",
+				"type": "NUMBER",
+				"precision": 38,
+				"scale": 0
+			},
+			{
+				"name": "VEHICLE_ID",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "LICENSE_PLATE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "VEHICLE_TYPE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "TOLL_BOOTH_ID",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "ENTRY_POINT",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "EXIT_POINT",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "TIMESTAMP",
+				"type": "TIMESTAMP_NTZ"
+			},
+			{
+				"name": "PAYMENT_METHOD",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "TOLL_AMOUNT",
+				"type": "FLOAT"
+			},
+			{
+				"name": "TAG_VALID",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "FRAUD_DETECTED",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "EVENT_DATE",
+				"type": "DATE"
+			}
+		],
+		"typeProperties": {
+			"schema": "SILVER_LAYER",
+			"table": "STG_TOLL_EVENTS"
+		}
+	}
+}

@@ -1,0 +1,37 @@
+{
+	"name": "ds_snowflake_stg_vehicle_profiles",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Snowflake_DB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeV2Table",
+		"schema": [
+			{
+				"name": "VEHICLE_ID",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "FIRST_LICENSE_PLATE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "FIRST_SEEN_TYPE",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "FIRST_ENTRY_POINT",
+				"type": "VARCHAR"
+			},
+			{
+				"name": "FIRST_EVENT_DATE",
+				"type": "DATE"
+			}
+		],
+		"typeProperties": {
+			"schema": "SILVER_LAYER",
+			"table": "STG_VEHICLE_PROFILES"
+		}
+	}
+}
