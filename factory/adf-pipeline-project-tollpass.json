@@ -1,0 +1,9 @@
+{
+	"name": "adf-pipeline-project-tollpass",
+	"location": "uaenorth",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "18d24b5e-95d1-4f31-b453-06c798a46406",
+		"tenantId": "cc660712-643a-4061-994d-5d82e0269523"
+	}
+}
