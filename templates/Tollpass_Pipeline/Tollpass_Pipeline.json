@@ -1,0 +1,682 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name"
+		},
+		"AzureDatabricks1": {
+			"type": "string"
+		},
+		"ls_blob_snowflake_stage": {
+			"type": "string"
+		},
+		"Delta_blobs": {
+			"type": "string"
+		},
+		"Snowflake_DB": {
+			"type": "string"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/Tollpass_Pipeline')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Avro-to-Parquet",
+						"type": "DatabricksNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/omar123915@hotmail.com/Avro to Parquet (Delta)",
+							"baseParameters": {
+								"event_date": {
+									"value": "@pipeline().parameters.event_date",
+									"type": "Expression"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "[parameters('AzureDatabricks1')]",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Gen2toBlob",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Avro-to-Parquet",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ParquetSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFileName": "*.parquet",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "ParquetReadSettings"
+								}
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "transaction_id",
+											"type": "Int32",
+											"physicalType": "INT32"
+										},
+										"sink": {
+											"name": "TRANSACTION_ID",
+											"type": "Int64",
+											"physicalType": "NUMBER",
+											"scale": 0,
+											"precision": 38
+										}
+									},
+									{
+										"source": {
+											"name": "vehicle_id",
+											"type": "String",
+											"physicalType": "UTF8"
+										},
+										"sink": {
+											"name": "VEHICLE_ID",
+											"type": "String",
+											"physicalType": "VARCHAR"
+										}
+									},
+									{
+										"source": {
+											"name": "license_plate",
+											"type": "String",
+											"physicalType": "UTF8"
+										},
+										"sink": {
+											"name": "LICENSE_PLATE",
+											"type": "String",
+											"physicalType": "VARCHAR"
+										}
+									},
+									{
+										"source": {
+											"name": "vehicle_type",
+											"type": "String",
+											"physicalType": "UTF8"
+										},
+										"sink": {
+											"name": "VEHICLE_TYPE",
+											"type": "String",
+											"physicalType": "VARCHAR"
+										}
+									},
+									{
+										"source": {
+											"name": "toll_booth_id",
+											"type": "String",
+											"physicalType": "UTF8"
+										},
+										"sink": {
+											"name": "TOLL_BOOTH_ID",
+											"type": "String",
+											"physicalType": "VARCHAR"
+										}
+									},
+									{
+										"source": {
+											"name": "entry_point",
+											"type": "String",
+											"physicalType": "UTF8"
+										},
+										"sink": {
+											"name": "ENTRY_POINT",
+											"type": "String",
+											"physicalType": "VARCHAR"
+										}
+									},
+									{
+										"source": {
+											"name": "exit_point",
+											"type": "String",
+											"physicalType": "UTF8"
+										},
+										"sink": {
+											"name": "EXIT_POINT",
+											"type": "String",
+											"physicalType": "VARCHAR"
+										}
+									},
+									{
+										"source": {
+											"name": "timestamp",
+											"type": "String",
+											"physicalType": "UTF8"
+										},
+										"sink": {
+											"name": "TIMESTAMP",
+											"type": "DateTime",
+											"physicalType": "TIMESTAMP_NTZ"
+										}
+									},
+									{
+										"source": {
+											"name": "payment_method",
+											"type": "String",
+											"physicalType": "UTF8"
+										},
+										"sink": {
+											"name": "PAYMENT_METHOD",
+											"type": "String",
+											"physicalType": "VARCHAR"
+										}
+									},
+									{
+										"source": {
+											"name": "toll_amount",
+											"type": "Double",
+											"physicalType": "DOUBLE"
+										},
+										"sink": {
+											"name": "TOLL_AMOUNT",
+											"type": "Double",
+											"physicalType": "FLOAT"
+										}
+									},
+									{
+										"source": {
+											"name": "tag_valid",
+											"type": "Boolean",
+											"physicalType": "BOOLEAN"
+										},
+										"sink": {
+											"name": "TAG_VALID",
+											"type": "Boolean",
+											"physicalType": "BOOLEAN"
+										}
+									},
+									{
+										"source": {
+											"name": "fraud_detected",
+											"type": "Boolean",
+											"physicalType": "BOOLEAN"
+										},
+										"sink": {
+											"name": "FRAUD_DETECTED",
+											"type": "Boolean",
+											"physicalType": "BOOLEAN"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "Gen2toBlob",
+								"type": "DatasetReference",
+								"parameters": {
+									"event_date": "@utcNow('yyyy-MM-dd')"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Blob_Parquet",
+								"type": "DatasetReference",
+								"parameters": {
+									"event_date": {
+										"value": "@utcNow('yyyy-MM-dd')",
+										"type": "Expression"
+									}
+								}
+							}
+						]
+					},
+					{
+						"name": "BlobToSnowflake",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Gen2toBlob",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ParquetSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"wildcardFileName": "*.parquet",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "ParquetReadSettings"
+								}
+							},
+							"sink": {
+								"type": "SnowflakeV2Sink",
+								"importSettings": {
+									"type": "SnowflakeImportCopyCommand"
+								}
+							},
+							"enableStaging": true,
+							"stagingSettings": {
+								"linkedServiceName": {
+									"referenceName": "[parameters('ls_blob_snowflake_stage')]",
+									"type": "LinkedServiceReference"
+								},
+								"path": "snowflake-stage/event_date=2025-04-29"
+							},
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "TRANSACTION_ID",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "TRANSACTION_ID",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "VEHICLE_ID",
+											"type": "String"
+										},
+										"sink": {
+											"name": "VEHICLE_ID",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "LICENSE_PLATE",
+											"type": "String"
+										},
+										"sink": {
+											"name": "LICENSE_PLATE",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "VEHICLE_TYPE",
+											"type": "String"
+										},
+										"sink": {
+											"name": "VEHICLE_TYPE",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "TOLL_BOOTH_ID",
+											"type": "String"
+										},
+										"sink": {
+											"name": "TOLL_BOOTH_ID",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ENTRY_POINT",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ENTRY_POINT",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "EXIT_POINT",
+											"type": "String"
+										},
+										"sink": {
+											"name": "EXIT_POINT",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "TIMESTAMP",
+											"type": "String"
+										},
+										"sink": {
+											"name": "TIMESTAMP",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "PAYMENT_METHOD",
+											"type": "String"
+										},
+										"sink": {
+											"name": "PAYMENT_METHOD",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "TOLL_AMOUNT",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "TOLL_AMOUNT",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "TAG_VALID",
+											"type": "Boolean"
+										},
+										"sink": {
+											"name": "TAG_VALID",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"name": "FRAUD_DETECTED",
+											"type": "Boolean"
+										},
+										"sink": {
+											"name": "FRAUD_DETECTED",
+											"type": "Boolean"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "Blob_Parquet",
+								"type": "DatasetReference",
+								"parameters": {
+									"event_date": {
+										"value": "@utcNow('yyyy-MM-dd')",
+										"type": "Expression"
+									}
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_snowflake_stg_toll_events",
+								"type": "DatasetReference",
+								"parameters": {
+									"event_date": "@formatDateTime(utcNow(), 'yyyy-MM-dd')"
+								}
+							}
+						]
+					}
+				],
+				"parameters": {
+					"event_date": {
+						"type": "string",
+						"defaultValue": "@utcNow('yyyy-MM-dd')"
+					},
+					"json_event_date": {
+						"type": "string",
+						"defaultValue": "@formatDateTime(utcNow(), 'yyyy-MM-dd')"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Gen2toBlob')]",
+				"[concat(variables('factoryId'), '/datasets/Blob_Parquet')]",
+				"[concat(variables('factoryId'), '/datasets/ds_snowflake_stg_toll_events')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Gen2toBlob')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "[parameters('Delta_blobs')]",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"event_date": {
+						"type": "string",
+						"defaultValue": "@utcNow('yyyy-MM-dd')"
+					}
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "toll-events-processed",
+						"fileSystem": "delta"
+					},
+					"compressionCodec": "none"
+				},
+				"schema": [
+					{
+						"name": "transaction_id",
+						"type": "INT32"
+					},
+					{
+						"name": "vehicle_id",
+						"type": "UTF8"
+					},
+					{
+						"name": "license_plate",
+						"type": "UTF8"
+					},
+					{
+						"name": "vehicle_type",
+						"type": "UTF8"
+					},
+					{
+						"name": "toll_booth_id",
+						"type": "UTF8"
+					},
+					{
+						"name": "entry_point",
+						"type": "UTF8"
+					},
+					{
+						"name": "exit_point",
+						"type": "UTF8"
+					},
+					{
+						"name": "timestamp",
+						"type": "UTF8"
+					},
+					{
+						"name": "payment_method",
+						"type": "UTF8"
+					},
+					{
+						"name": "toll_amount",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "tag_valid",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "fraud_detected",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "event_date",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Blob_Parquet')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "[parameters('ls_blob_snowflake_stage')]",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"event_date": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "snowflake-stage"
+					},
+					"compressionCodec": "none"
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_snowflake_stg_toll_events')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "[parameters('Snowflake_DB')]",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"event_date": {
+						"type": "string",
+						"defaultValue": "@formatDateTime(utcNow(), 'yyyy-MM-dd')"
+					}
+				},
+				"annotations": [],
+				"type": "SnowflakeV2Table",
+				"schema": [
+					{
+						"name": "TRANSACTION_ID",
+						"type": "NUMBER",
+						"precision": 38,
+						"scale": 0
+					},
+					{
+						"name": "VEHICLE_ID",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "LICENSE_PLATE",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "VEHICLE_TYPE",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "TOLL_BOOTH_ID",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "ENTRY_POINT",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "EXIT_POINT",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "TIMESTAMP",
+						"type": "TIMESTAMP_NTZ"
+					},
+					{
+						"name": "PAYMENT_METHOD",
+						"type": "VARCHAR"
+					},
+					{
+						"name": "TOLL_AMOUNT",
+						"type": "FLOAT"
+					},
+					{
+						"name": "TAG_VALID",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "FRAUD_DETECTED",
+						"type": "BOOLEAN"
+					},
+					{
+						"name": "EVENT_DATE",
+						"type": "DATE"
+					}
+				],
+				"typeProperties": {
+					"schema": "BRONZE_LAYER",
+					"table": "STG_TOLL_EVENTS"
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
