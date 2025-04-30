@@ -397,17 +397,6 @@ CREATE WAREHOUSE IF NOT EXISTS COMPUTE_WH;
 USE WAREHOUSE COMPUTE_WH;
 
 -- =========================
--- SUSPEND EXISTING GOLD TASKS
--- =========================
-ALTER TASK IF EXISTS task_fact_toll_insert SUSPEND;
-ALTER TASK IF EXISTS task_mini_dim_vehicle SUSPEND;
-ALTER TASK IF EXISTS task_mini_dim_location SUSPEND;
-ALTER TASK IF EXISTS task_dim_vehicle_hist SUSPEND;
-ALTER TASK IF EXISTS task_dim_junk SUSPEND;
-ALTER TASK IF EXISTS task_dim_toll_location SUSPEND;
-ALTER TASK IF EXISTS task_dim_time SUSPEND;
-
--- =========================
 -- GOLD SCHEMA & TABLES
 -- =========================
 CREATE OR REPLACE SCHEMA GOLD_LAYER;
